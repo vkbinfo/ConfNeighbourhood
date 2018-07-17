@@ -1,24 +1,34 @@
-import { Component } from "../../../node_modules/@angular/core";
+import { Component, OnInit } from "../../../node_modules/@angular/core";
+import { EventService } from "../services/event.service";
+import { ToasterService } from "../common_services/toastr-service"
 
+declare let toastr;
 @Component({
     selector: 'events-list',
     template: `
             <div>  
+                <nav-app></nav-app>    
                 <h1> Upcoming angular Events </h1>
-                <event-thumbnail [event]="event1" ></event-thumbnail>
+                <div class = "row">
+                    <div class = "col-md-5"  *ngFor = "let event1 of events" >
+                        <event-thumbnail [event]="event1" (click) = "clickThumbnailEvent(event1.name)">
+                        </event-thumbnail>
+                    </div>
+                <div>
             </div>
     `
 })
-export class EventListComponent {
-    event1 = {
-        name:'ngConf 2025',
-        date: '3/1/2025', 
-        time: '8 AM', 
-        price: 599,
-        location: {
-            address: '123 Main St', 
-            city: 'Salt Lake City, UT', 
-            country: 'USA'
-        }
+export class EventListComponent implements OnInit{
+    events:any[];
+    constructor(private eventService: EventService,
+         private toastService: ToasterService){}
+  
+    ngOnInit(){
+        this.events = this.eventService.getEvents();
+    }
+   
+    clickThumbnailEvent(title){
+        // notification for some success messages.
+        this.toastService.success(title)
     }
 }
