@@ -1,26 +1,53 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
-import { EventAppComponent } from './event-app.component';
-import { EventListComponent } from './events/events-list.component'
-import { EventThumbnailComponent } from "./events/event-thumbnail.component";
-import { NavAppComponent} from "./navbar/nav-app.component"
-import { EventService } from "./services/event.service"
-import { ToasterService } from "./common_services/toastr-service"
+import { 
+        EventAppComponent,
+        EventListComponent,
+        EventThumbnailComponent,
+        NavAppComponent,
+        EventDetailComponent,
+        CreateEventComponent,
+        Error404Component,
+        EventRouteActivatorService,
+
+        //services
+        EventService,
+        ToasterService,
+
+        //routes
+        appRoutes
+} from './index'
+
+
 @NgModule({
   imports: [
-    BrowserModule
+    BrowserModule,
+    RouterModule.forRoot(appRoutes)
   ],
   declarations: [
+    NavAppComponent,
     EventAppComponent,
     EventListComponent,
     EventThumbnailComponent,
-    NavAppComponent
+    EventDetailComponent,
+    CreateEventComponent,
+    Error404Component
   ],
   providers:[
     EventService,
-    ToasterService
+    ToasterService,
+    EventRouteActivatorService,
+    {provide:"checkMyDirtyState",useValue:checkingInCreateEventComponent}
   ],
   bootstrap: [EventAppComponent]
 })
 export class AppModule { }
+
+function checkingInCreateEventComponent(component:CreateEventComponent){
+  if(component.dirty){
+    return window.confirm("Do you really want to leave this page?");
+  }
+  return false;
+}

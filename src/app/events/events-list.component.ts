@@ -7,7 +7,6 @@ declare let toastr;
     selector: 'events-list',
     template: `
             <div>  
-                <nav-app></nav-app>    
                 <h1> Upcoming angular Events </h1>
                 <div class = "row">
                     <div class = "col-md-5"  *ngFor = "let event1 of events" >
